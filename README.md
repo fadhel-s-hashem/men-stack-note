@@ -144,5 +144,50 @@ ul>
 ````ejs
 <a href="/ <%= item.id %>"><&= item.name %></a>
 ````
+we should see the uRL changes
+
+### Reusable nav bar with partials
+creat a folder called `partials` inside of `views`
+creat a file `nav.ejs` inside `partials`
+````nav.ejs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory app</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a>
+    </nav>
+````
+
+
+
+### add CSS image with public
+
+###CSS
+make `public` folder outside 
+make `stylesheets` folder with `style.CSS` folder inside
+After that add `<link rel="stylesheet" href="/stylesheets/style.css">` in `nav.ejs` file
+
+config our server to look inside of the `public ` folder for static file:
+````sever.js
+// requre a path from nide at the top
+const path = require('path')
+
+// and this before the morgan
+app.use(express.static(path.join(__dirname, "public")))
+````
+
+- Link the stylesheet in the head of our `html` files (inside `nav` if we using `partiels` )
+  ````nav.ejs
+  <link rel="stylesheet" href="/stylesheets/style.css">
+  ````
+
+### image
+
 
 
