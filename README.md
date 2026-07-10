@@ -138,17 +138,17 @@ ul>
 </ul>   
 ````
 
-### creating dynamic links to a `shoe` pag
+### creating dynamic links to a `show` page
 `item.name` is dynamic showing up. The Link is also dynamic changing with the item (see `forEach` above)
 
 ````ejs
 <a href="/ <%= item.id %>"><&= item.name %></a>
 ````
-we should see the uRL changes
+we should see the URL changes
 
 ### Reusable nav bar with partials
-creat a folder called `partials` inside of `views`
-creat a file `nav.ejs` inside `partials`
+-creat a folder called `partials` inside of `views`
+-creat a file `nav.ejs` inside `partials`
 ````nav.ejs
 <!DOCTYPE html>
 <html lang="en">
@@ -163,15 +163,17 @@ creat a file `nav.ejs` inside `partials`
         <a href="/">Home</a>
     </nav>
 ````
+Include `nav` in other files with this statment
+````
+<%- include('./partials/nav') %>
+````
 
-
-
-### add CSS image with public
+### add CSS image with `public`
 
 ###CSS
-make `public` folder outside 
-make `stylesheets` folder with `style.CSS` folder inside
-After that add `<link rel="stylesheet" href="/stylesheets/style.css">` in `nav.ejs` file
+- creat `public` folder outside 
+- in side `public` make `stylesheets` folder  with `style.CSS` inside
+- After that add `<link rel="stylesheet" href="/stylesheets/style.css">` in `nav.ejs` file
 
 config our server to look inside of the `public ` folder for static file:
 ````sever.js
@@ -188,6 +190,8 @@ app.use(express.static(path.join(__dirname, "public")))
   ````
 
 ### image
+- creat `images` folder inside of the `public` folder
+- Link to images like normal : `<img src="/images/family.jpg" alt="A happy family">`
 
 
 
