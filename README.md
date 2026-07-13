@@ -17,8 +17,9 @@
 - creat `.gitignore` file
 - intilaize a node project `npm init -y`
 - install express and morgan `npm i express morgan`
-- usually neadt to install ejs wit `npm i ejs
+- usually neadt to install ejs wit `npm i ejs`
 - if yoi use mongoose and dotenv `npm i mongoose dotenv`
+- for (DELETE & PUT) install method-override `npm i method-override`
 
 or just install this from start
 ````
@@ -227,28 +228,81 @@ mongoose.connection.on('connected', () => {
     console.log(`Connected to MongoDB ${mongoose.connection.name} 🥭`)
 })
 ````
+## sendig an object in the Database
+Create a `models` folder and a `name.js` example (user.js) (fruit.js) file
+
+Add the schema and model:
+````js
+// dont change this
+ const mongoose = require('mongoose')
+
+ //only change the (nameSchema = useSchema)
+ // and the varible inside
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+})
+
+// const (Name) = mongoose.model('Name', nameSchema)
+const User = mongoose.model('User', userSchema)
+
+// module.exports = Name
+module.exports = User
+
+// chose the name better to be lke the JS file name
+````
+
+## how to use DELETE and PUT (CRUD) concept
+for (DELETE & PUT) install method-override `npm i method-override`
+and add
+````
+const methodOverride = require("method-override");
+````
+==================================================================================
 
 how updated server.js should look
 ````server.js
-// for mongoose and .env
-const dotenv = require('dotenv').config()
-//bring express and morgan into our server
-const express = require('express')
-const morgan = require('morgan')
-// for mongoose and .env
-const mongoose = require('mongoose')
-const dns = require('node:dns')
-dns.setServers(['8.8.8.8', '1.1.1.1'])
+const dns = require("node:dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"])
+// dont forget the dns above ☝️
+// for mongos and .env👇
+const dotenv = require("dotenv");
+dotenv.config();
+// //bring express and morgan into our server
+const express = require("express");
+const app = express();
+const morgan = require("morgan");
 
-// actuall use express
-const app = express ()
-// for mongoose and .env
-mongoose.connect(process.env.MONGODB_URI)
-mongoose.connection.on('connected', () =>{
-    console.log(`Connected to MongoDB ${mongoose.connection.name}`)
-})
-// for morgan
-app.use(morgan('dev'))
+const mongoose = require("mongoose");
+
+// to use (PUT & DELETE)
+const methodOverride = require("method-override");
+
+
+// Set the port from environment variable or default to 3000
+const port = process.env.PORT ? process.env.PORT : "4000";
+
+// also for mongos and .env 🥭
+mongoose.connect(process.env.MONGODB_URI);
+
+mongoose.connection.on("connected", () => {
+  console.log(`Connected to MongoDB ${mongoose.connection.name}.`);
+});
+
+//===============================================
+
+// Middleware to parse URL-encoded data from forms
+app.use(express.urlencoded({ extended: false }));
+// Middleware for using HTTP verbs such as PUT or DELETE
+app.use(methodOverride("_method"));
+// Morgan for logging HTTP requests
+app.use(morgan('dev'));
 ````
 
   
