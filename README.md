@@ -20,6 +20,12 @@
 - usually neadt to install ejs wit `npm i ejs
 - if yoi use mongoose and dotenv `npm i mongoose dotenv`
 
+or just install this from start
+````
+npm i express mongoose dotenv ejs morgan method-override
+
+````
+
  ### Add (node_modules) to (gitignore)
 
 .gitignore
