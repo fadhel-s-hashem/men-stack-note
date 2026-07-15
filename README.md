@@ -20,10 +20,11 @@
 - usually neadt to install ejs wit `npm i ejs`
 - if yoi use mongoose and dotenv `npm i mongoose dotenv`
 - for (DELETE & PUT) install method-override `npm i method-override`
+- for the session library `npm i express-session`
 
 or just install this from start
 ````
-npm i express mongoose dotenv ejs morgan method-override
+npm i express mongoose dotenv ejs morgan method-override express-session
 
 ````
 
@@ -264,6 +265,42 @@ and add
 ````
 const methodOverride = require("method-override");
 ````
+## Add session for sign-in and sign-up 
+
+-first install session library `npm i express-session`
+-in `.env` file add `SESSION_SECRET=some-unique-secret`
+
+for the (some-unique-secr) you need to put uniqe hard password
+you could put this in terminal to generat it or write anything
+````
+node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+````
+In server.js add this UP
+````
+const session = require('express-session');
+````
+Add this with middleware 
+````
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+````
+##
+To Create a session when user logs in
+In the controllers put this in JS file 
+````
+req.session.user = {
+  username: userInDatabase.username,
+  _id: userInDatabase._id
+};
+````
+
+
+
 ==================================================================================
 
 how updated server.js should look
@@ -274,19 +311,26 @@ dns.setServers(["8.8.8.8", "1.1.1.1"])
 // for mongos and .env👇
 const dotenv = require("dotenv");
 dotenv.config();
-// //bring express and morgan into our server
+//bring express and morgan into our server
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
 
+const session = require('express-session')
+
 const mongoose = require("mongoose");
+const { MongoStore } = require("connect-mongo");
+
 
 // to use (PUT & DELETE)
 const methodOverride = require("method-override");
 
+//to import the controller
+const ???Ctrl = require('./controllers/???')
+
 
 // Set the port from environment variable or default to 3000
-const port = process.env.PORT ? process.env.PORT : "4000";
+const port = process.env.PORT ? process.env.PORT : "3000";
 
 // also for mongos and .env 🥭
 mongoose.connect(process.env.MONGODB_URI);
@@ -303,6 +347,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride("_method"));
 // Morgan for logging HTTP requests
 app.use(morgan('dev'));
+// Middleware for session
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+  })
+}))
+
+// At the end
+app.listen(port, () => {
+  console.log(`The express app is ready on port ${port}!`);
+});
 ````
 
   
